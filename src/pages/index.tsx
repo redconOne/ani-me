@@ -9,7 +9,7 @@ export default function Home() {
   const { status } = useSession();
 
   useEffect(() => {
-    if (status === "authenticated") router.push("/main").catch(console.error);
+    if (status === "authenticated") router.push("/anime/").catch(console.error);
   }, [status, router]);
 
   return (
