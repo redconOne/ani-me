@@ -1,6 +1,6 @@
 {
   "name": "ani-me",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -43,9 +44,14 @@
     "prettier-plugin-tailwindcss": "^0.5.7",
     "prisma": "^5.6.0",
     "tailwindcss": "^3.3.5",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "semantic-release": "^23.0.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.26.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redconOne/ani-me.git"
   }
 }
