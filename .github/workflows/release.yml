@@ -19,7 +19,8 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
+        env: 
+          SKIP_ENV_VALIDATION: 1
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SKIP_ENV_VALIDATION: 1
