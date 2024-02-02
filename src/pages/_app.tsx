@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/themeProvider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -18,16 +19,23 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <div
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
       >
-        <Container>
-          <Component {...pageProps} />
-        </Container>
-      </div>
+        <div
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <Container>
+            <Component {...pageProps} />
+          </Container>
+        </div>
+      </ThemeProvider>
     </SessionProvider>
   );
 };
