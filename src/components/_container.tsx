@@ -1,3 +1,4 @@
+import Header from "./header/Header";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, type ReactNode } from "react";
@@ -13,7 +14,7 @@ export default function Container({ children }: { children: ReactNode }) {
 
   return (
     <div>
-      <div>HEADER</div>
+      {status === "authenticated" && <Header />}
       <main>{children}</main>
       <div>FOOTER</div>
     </div>
