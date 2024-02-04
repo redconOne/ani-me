@@ -7,10 +7,13 @@ import { useState, useEffect } from "react";
 export default function Page() {
   const [animeList, setAnimeList] = useState<Anime[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const response = api.anime.search.useQuery({
-    name: searchTerm,
-    sfw: false,
-  });
+  const response = api.anime.search.useQuery(
+    {
+      name: searchTerm,
+      sfw: false,
+    },
+    { enabled: !!searchTerm },
+  );
   const handleSearch = async (name: string) => setSearchTerm(name);
 
   useEffect(() => {
