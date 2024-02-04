@@ -28,3 +28,21 @@ export type SearchResponse = {
     },
   ];
 };
+
+export type RecommendedAnimeResponse = {
+  data: [
+    {
+      entry: [
+        {
+          mal_id: number;
+          title: string;
+          images: {
+            jpg: {
+              image_url: string;
+            };
+          };
+        },
+      ];
+    },
+  ];
+};
