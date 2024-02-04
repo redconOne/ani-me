@@ -1,5 +1,9 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { type Anime, type SearchResponse } from "@/types/anime";
+import {
+  type Anime,
+  type SearchResponse,
+  type RecommendedAnimeResponse,
+} from "@/types/anime";
 import { z } from "zod";
 
 const generateAnimeFromResponse = (arr: Anime[], animeList: SearchResponse) => {
@@ -66,6 +70,43 @@ export const animeRouter = createTRPCRouter({
       const parsedResponse = (await apiResponse.json()) as SearchResponse;
 
       generateAnimeFromResponse(response, parsedResponse);
+
+      return response;
+    }),
+
+  recommended: protectedProcedure
+    .input(z.object({ limit: z.number() }))
+    .query(async ({ input }) => {
+      const response: Anime[] = [];
+      const { limit } = input;
+      const url = `${process.env.API_URL}recommendations/anime?page=1`;
+      const apiResponse = await fetch(url);
+
+      if (!apiResponse.ok)
+        throw new Error(
+          `Failed to fetch data from API. Status: ${apiResponse.status}`,
+        );
+
+      const parsedResponse =
+        (await apiResponse.json()) as RecommendedAnimeResponse;
+
+      for (const entry of parsedResponse.data.slice(0, limit)) {
+        const item = entry.entry[0];
+        const anime = {
+          mal_id: item.mal_id,
+          english_title: "",
+          default_title: item.title,
+          trailer: "",
+          type: "",
+          image: item.images.jpg.image_url || "",
+          status: "",
+          rating: "",
+          score: 0,
+          rank: 0,
+          synopsis: "No synopsis available",
+        };
+        response.push(anime);
+      }
 
       return response;
     }),

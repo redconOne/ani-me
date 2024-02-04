@@ -24,7 +24,7 @@ export default function AnimeList({ animeList }: { animeList: Anime[] }) {
     <div className="flex flex-wrap justify-around">
       {animeList.map((anime) => {
         return (
-          <Dialog key={anime.default_title}>
+          <Dialog key={anime.mal_id + anime.default_title}>
             <DialogTrigger asChild>
               <Card className="mb-4 mt-4 w-64 p-4">
                 <CardHeader>
