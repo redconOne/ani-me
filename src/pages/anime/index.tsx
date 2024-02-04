@@ -4,7 +4,7 @@ export default function Home() {
   const { data } = useSession();
 
   return (
-    <div>
+    <div className="my-52 flex w-full flex-col items-center ">
       <h1>Hello there {data?.user.name}</h1>
       <h2>
         Welcome to the main page! There will be important stuff here,
