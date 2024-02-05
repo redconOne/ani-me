@@ -16,7 +16,6 @@ export default function Container({ children }: { children: ReactNode }) {
     <div>
       {status === "authenticated" && <Header />}
       <main>{children}</main>
-      <div>FOOTER</div>
     </div>
   );
 }

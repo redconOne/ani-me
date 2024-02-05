@@ -13,20 +13,20 @@ export type Anime = {
 };
 
 export type SearchResponse = {
-  data: [
-    {
-      mal_id: number;
-      titles: [{ type: string; title: string }];
-      trailer: { url: string };
-      type: string;
-      images: { jpg: { image_url: string } };
-      status: string;
-      rating: string;
-      score: number;
-      rank: number;
-      synopsis: string;
-    },
-  ];
+  data: SearchResponseData[];
+};
+
+export type SearchResponseData = {
+  mal_id: number;
+  titles: [{ type: string; title: string }];
+  trailer: { url: string };
+  type: string;
+  images: { jpg: { image_url: string } };
+  status: string;
+  rating: string;
+  score: number;
+  rank: number;
+  synopsis: string;
 };
 
 export type RecommendedAnimeResponse = {

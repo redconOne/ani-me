@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   type Anime,
   type SearchResponse,
+  type SearchResponseData,
   type RecommendedAnimeResponse,
 } from "@/types/anime";
 import { z } from "zod";
@@ -73,6 +74,26 @@ export const animeRouter = createTRPCRouter({
 
       return response;
     }),
+
+  random: protectedProcedure.query(async () => {
+    const response: Anime[] = [];
+    const url = `${process.env.API_URL}random/anime`;
+    const apiResponse = await fetch(url);
+
+    if (!apiResponse.ok)
+      throw new Error(
+        `Failed to fetch data from API. Status: ${apiResponse.status}`,
+      );
+
+    const parsedResponse = (await apiResponse.json()) as {
+      data: SearchResponseData;
+    };
+    const animeObject = { data: [parsedResponse.data] };
+
+    generateAnimeFromResponse(response, animeObject);
+
+    return response;
+  }),
 
   recommended: protectedProcedure
     .input(z.object({ limit: z.number() }))
