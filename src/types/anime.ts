@@ -46,3 +46,10 @@ export type RecommendedAnimeResponse = {
     },
   ];
 };
+
+export type ListResponse = {
+  id: string;
+  email: string;
+  image: string;
+  wishlist: Anime[];
+};

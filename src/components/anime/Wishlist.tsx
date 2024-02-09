@@ -20,35 +20,20 @@ import React, { useState, useEffect } from "react";
 import { type Anime } from "@/types/anime";
 import { api } from "@/utils/api";
 
-export default function AnimeList({ animeList }: { animeList: Anime[] }) {
+export default function Wishlist() {
   // eslint-disable-next-line prefer-const
   let { data: response, refetch } = api.user.getList.useQuery({
     type: "wishlist",
   });
-  const wishlistMutation = api.user.toggleWishlist.useMutation();
+  const mutation = api.user.toggleWishlist.useMutation();
   const [wishlist, setWishlist] = useState<Anime[]>([]);
 
   useEffect(() => {
     if (response?.wishlist) setWishlist(response.wishlist);
   }, [response?.wishlist, response]);
 
-  const addToWishlist = (anime: Anime) => {
-    wishlistMutation.mutate(
-      { ...anime, add: true },
-      {
-        onSuccess: () => {
-          const helper = async () => {
-            const { data: newResponse } = await refetch();
-            response = newResponse;
-          };
-          helper().catch(console.error);
-        },
-      },
-    );
-  };
-
-  const removeFromWishlist = (anime: Anime) => {
-    wishlistMutation.mutate(
+  const removeFromWishlist = async (anime: Anime) => {
+    mutation.mutate(
       { ...anime, add: false },
       {
         onSuccess: () => {
@@ -64,7 +49,7 @@ export default function AnimeList({ animeList }: { animeList: Anime[] }) {
 
   return (
     <div className="flex flex-wrap justify-around">
-      {animeList.map((anime) => {
+      {wishlist?.map((anime) => {
         return (
           <Dialog key={anime.mal_id + anime.default_title}>
             <DialogTrigger asChild>
@@ -110,23 +95,13 @@ export default function AnimeList({ animeList }: { animeList: Anime[] }) {
                 {anime.synopsis}
               </ScrollArea>
               <div className="flex flex-col md:flex-row md:gap-4">
-                {wishlist.some((item) => item.mal_id === anime.mal_id) ? (
-                  <Button
-                    variant="destructive"
-                    className="md:jw-40 mb-2 flex-1 md:mb-0"
-                    onClick={() => removeFromWishlist(anime)}
-                  >
-                    Remove from wish list
-                  </Button>
-                ) : (
-                  <Button
-                    variant="default"
-                    className="md:jw-40 mb-2 flex-1 md:mb-0"
-                    onClick={() => addToWishlist(anime)}
-                  >
-                    Add to Wish List
-                  </Button>
-                )}
+                <Button
+                  variant="destructive"
+                  className="md:jw-40 mb-2 flex-1 md:mb-0"
+                  onClick={() => removeFromWishlist(anime)}
+                >
+                  Remove from wish list
+                </Button>
                 <Button
                   variant="default"
                   className="md:jw-40 mb-2 flex-1 md:mb-0"
