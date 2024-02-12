@@ -52,4 +52,5 @@ export type ListResponse = {
   email: string;
   image: string;
   wishlist: Anime[];
+  watchedlist: Anime[];
 };

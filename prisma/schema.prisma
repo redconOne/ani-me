@@ -56,7 +56,7 @@ model User {
     posts         Post[]
     username      String?
     wishlist      Anime[] @relation("Wishlist")
-    watchlist     Anime[] @relation("Watchlist")
+    watchedlist   Anime[] @relation("Watchedlist")
 }
 
 model Anime {
@@ -71,7 +71,7 @@ model Anime {
     score             Float 
     rank              Int 
     synopsis          String
-    usersOnWatchlist  User[]  @relation("Watchlist")
+    usersOnWatchedlist  User[]  @relation("Watchedlist")
     usersOnWishList   User[]  @relation("Wishlist")
   }
 

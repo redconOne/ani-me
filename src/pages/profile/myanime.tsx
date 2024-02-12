@@ -1,4 +1,5 @@
 import Wishlist from "@/components/anime/Wishlist";
+import Watchedlist from "@/components/anime/Watchedlist";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Page() {
@@ -16,7 +17,9 @@ export default function Page() {
         <TabsContent value="wishlist">
           <Wishlist />
         </TabsContent>
-        <TabsContent value="watchlist">COMING SOON</TabsContent>
+        <TabsContent value="watchlist">
+          <Watchedlist />
+        </TabsContent>
       </Tabs>
     </div>
   );
