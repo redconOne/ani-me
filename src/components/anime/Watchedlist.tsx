@@ -23,33 +23,17 @@ import { api } from "@/utils/api";
 export default function Wishlist() {
   // eslint-disable-next-line prefer-const
   let { data: response, refetch } = api.user.getList.useQuery({
-    type: "wishlist",
+    type: "watchedlist",
   });
-  const wishlistMutation = api.user.toggleWishlist.useMutation();
-  const watchedlistMutation = api.user.toggleWatchedlist.useMutation();
-  const [wishlist, setWishlist] = useState<Anime[]>([]);
+  const mutation = api.user.toggleWatchedlist.useMutation();
+  const [watchedlist, setWatchedlist] = useState<Anime[]>([]);
 
   useEffect(() => {
-    if (response?.wishlist) setWishlist(response.wishlist);
-  }, [response?.wishlist, response]);
-
-  const toggleWishlist = async (anime: Anime, add: boolean) => {
-    wishlistMutation.mutate(
-      { ...anime, add },
-      {
-        onSuccess: () => {
-          const helper = async () => {
-            const { data: newResponse } = await refetch();
-            response = newResponse;
-          };
-          helper().catch(console.error);
-        },
-      },
-    );
-  };
+    if (response?.watchedlist) setWatchedlist(response.watchedlist);
+  }, [response?.watchedlist, response]);
 
   const toggleWatchedlist = async (anime: Anime, add: boolean) => {
-    watchedlistMutation.mutate(
+    mutation.mutate(
       { ...anime, add },
       {
         onSuccess: () => {
@@ -65,7 +49,7 @@ export default function Wishlist() {
 
   return (
     <div className="flex flex-wrap justify-around">
-      {wishlist?.map((anime) => {
+      {watchedlist?.map((anime) => {
         return (
           <Dialog key={anime.mal_id + anime.default_title}>
             <DialogTrigger asChild>
@@ -112,18 +96,11 @@ export default function Wishlist() {
               </ScrollArea>
               <div className="flex flex-col md:flex-row md:gap-4">
                 <Button
-                  variant="destructive"
-                  className="md:jw-40 mb-2 flex-1 md:mb-0"
-                  onClick={() => toggleWishlist(anime, false)}
-                >
-                  Remove from wish list
-                </Button>
-                <Button
                   variant="default"
                   className="md:jw-40 mb-2 flex-1 md:mb-0"
-                  onClick={() => toggleWatchedlist(anime, true)}
+                  onClick={() => toggleWatchedlist(anime, false)}
                 >
-                  Add to Watched List
+                  Remove from watched list
                 </Button>
               </div>
             </DialogContent>

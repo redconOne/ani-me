@@ -23,18 +23,21 @@ import { api } from "@/utils/api";
 export default function AnimeList({ animeList }: { animeList: Anime[] }) {
   // eslint-disable-next-line prefer-const
   let { data: response, refetch } = api.user.getList.useQuery({
-    type: "wishlist",
+    type: "all",
   });
   const wishlistMutation = api.user.toggleWishlist.useMutation();
+  const watchedlistMutation = api.user.toggleWatchedlist.useMutation();
   const [wishlist, setWishlist] = useState<Anime[]>([]);
+  const [watchedlist, setWatchedlist] = useState<Anime[]>([]);
 
   useEffect(() => {
     if (response?.wishlist) setWishlist(response.wishlist);
-  }, [response?.wishlist, response]);
+    if (response?.watchedlist) setWatchedlist(response.watchedlist);
+  }, [response]);
 
-  const addToWishlist = (anime: Anime) => {
+  const toggleWishlist = (anime: Anime, add: boolean) => {
     wishlistMutation.mutate(
-      { ...anime, add: true },
+      { ...anime, add },
       {
         onSuccess: () => {
           const helper = async () => {
@@ -47,9 +50,9 @@ export default function AnimeList({ animeList }: { animeList: Anime[] }) {
     );
   };
 
-  const removeFromWishlist = (anime: Anime) => {
-    wishlistMutation.mutate(
-      { ...anime, add: false },
+  const toggleWatchedlist = (anime: Anime, add: boolean) => {
+    watchedlistMutation.mutate(
+      { ...anime, add },
       {
         onSuccess: () => {
           const helper = async () => {
@@ -110,29 +113,49 @@ export default function AnimeList({ animeList }: { animeList: Anime[] }) {
                 {anime.synopsis}
               </ScrollArea>
               <div className="flex flex-col md:flex-row md:gap-4">
-                {wishlist.some((item) => item.mal_id === anime.mal_id) ? (
+                {watchedlist.some((item) => item.mal_id === anime.mal_id) ? (
                   <Button
                     variant="destructive"
                     className="md:jw-40 mb-2 flex-1 md:mb-0"
-                    onClick={() => removeFromWishlist(anime)}
+                    onClick={() => toggleWatchedlist(anime, false)}
                   >
-                    Remove from wish list
+                    Remove from watched list
                   </Button>
+                ) : wishlist.some((item) => item.mal_id === anime.mal_id) ? (
+                  <>
+                    <Button
+                      variant="destructive"
+                      className="md:jw-40 mb-2 flex-1 md:mb-0"
+                      onClick={() => toggleWishlist(anime, false)}
+                    >
+                      Remove from wish list
+                    </Button>
+                    <Button
+                      variant="default"
+                      className="md:jw-40 mb-2 flex-1 md:mb-0"
+                      onClick={() => toggleWatchedlist(anime, true)}
+                    >
+                      Add to watched list
+                    </Button>{" "}
+                  </>
                 ) : (
-                  <Button
-                    variant="default"
-                    className="md:jw-40 mb-2 flex-1 md:mb-0"
-                    onClick={() => addToWishlist(anime)}
-                  >
-                    Add to Wish List
-                  </Button>
+                  <>
+                    <Button
+                      variant="default"
+                      className="md:jw-40 mb-2 flex-1 md:mb-0"
+                      onClick={() => toggleWishlist(anime, true)}
+                    >
+                      Add to wish list
+                    </Button>
+                    <Button
+                      variant="default"
+                      className="md:jw-40 mb-2 flex-1 md:mb-0"
+                      onClick={() => toggleWatchedlist(anime, true)}
+                    >
+                      Add to watched list
+                    </Button>{" "}
+                  </>
                 )}
-                <Button
-                  variant="default"
-                  className="md:jw-40 mb-2 flex-1 md:mb-0"
-                >
-                  Add to Watched List
-                </Button>
               </div>
             </DialogContent>
           </Dialog>
